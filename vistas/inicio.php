@@ -4,8 +4,14 @@
 
 <body>
   <div class="container center">
-    <!-- 
-    <?php // foreach ($parametros["datos"] as $dato) : ?>
+
+
+    <?php foreach ($parametros["mensajes"] as $mensaje) : ?>
+      <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
+    <?php endforeach; ?>
+    
+    <?php foreach ($parametros["datos"] as $dato) : 
+    ?>
 
       <div class="card" style="width:400px">
         <img class="card-img-top" src=<?php $dato['imagen'] ?> alt="Card image">
@@ -15,8 +21,9 @@
         </div>
       </div>
 
-    <?php // endforeach; ?>
-    -->
+    <?php endforeach; 
+    ?>
+    
   </div>
 </body>
 
