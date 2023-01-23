@@ -36,7 +36,7 @@ class modelo
   public function listarEntradas()
   {
     $return = [
-      "corrector" => false,
+      "correcto" => false,
       "datos" => null,
       "error" => null
     ];
@@ -49,7 +49,7 @@ class modelo
       $resultsquery = $this->conexion->query($sql);
 
       if ($resultsquery) {
-        $return['corrector'] = true;
+        $return['correcto'] = true;
         $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
       }
     } catch (PDOException $ex) {
