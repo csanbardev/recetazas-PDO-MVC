@@ -1,5 +1,5 @@
 <?php
-  session_start();
+  // session_start();
 ?>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -18,22 +18,28 @@
     </li>
     <?php
     if (isset($_SESSION['iniciada']) && $_SESSION['iniciada']) {
-      echo
-      '
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-      '.  
-        $_SESSION['nick'].  
-      '  
-        </a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="'.
-          'index.php?accion=listadoUsuario&id='.$_SESSION['id']
-          .'">Entradas</a>
-          <a class="dropdown-item" href="#">Cerrar sesión</a>
-        </div>
-    </li>
-      ';
+
+      $html = '<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">';
+      $html = $html.$_SESSION['nick'];
+      $html = $html.'</a>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="'.
+        'index.php?accion=';
+
+      if($_SESSION['nick']=='admin'){
+        $html = $html.'listadoAdmin'.'&id=';
+      } else{
+        $html = $html.'listadoUsuario'.'&id=';
+      } 
+
+      $html = $html.$_SESSION['id'];
+      $html = $html.'">Entradas</a>
+      <a class="dropdown-item" href="#">Cerrar sesión</a>
+    </div>
+</li>';
+
+      echo $html;
+      
     }else{
       echo
       '
