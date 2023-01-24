@@ -134,8 +134,9 @@ class controlador
           "mensaje" => "Sesión iniciada con éxito"
         ];
         $parametros["datos"] = $resultModelo["datos"];
-        session_start();
+        // session_start();
         $_SESSION['nick'] = $_POST["txtnick"];
+        $_SESSION['id'] = $parametros['datos']['id'];
         $_SESSION['iniciada'] = true;
 
       }else{
