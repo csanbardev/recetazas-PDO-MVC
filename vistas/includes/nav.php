@@ -26,7 +26,7 @@
         <a class="dropdown-item" href="'.
         'index.php?accion=';
 
-      if($_SESSION['nick']=='admin'){
+      if($_SESSION['rol']=='admin'){
         $html = $html.'listadoAdmin'.'&id=';
       } else{
         $html = $html.'listadoUsuario'.'&id=';

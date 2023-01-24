@@ -139,6 +139,7 @@ class controlador
         $_SESSION['nick'] = $_POST["txtnick"];
         $_SESSION['id'] = $parametros['datos']['id'];
         $_SESSION['iniciada'] = true;
+        $_SESSION['rol'] = $parametros['datos']['rol'];
 
       }else{
         $this->mensajes[] = [
@@ -151,7 +152,7 @@ class controlador
     $parametros['mensajes'] = $this->mensajes;
 
     if($resultModelo['correcto']){
-      $_POST['txtnick'] == "user"? $this->listadoUsuario($parametros['datos']['id']) : $this->listadoAdmin();
+      $resultModelo['datos']['rol'] == "user"? $this->listadoUsuario($parametros['datos']['id']) : $this->listadoAdmin();
     }else{
       $this->index();
     }
