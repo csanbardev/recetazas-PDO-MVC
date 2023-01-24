@@ -1,6 +1,5 @@
 <?php
-session_start();
-
+  // hehehe
 ?>
 
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
@@ -28,16 +27,15 @@ session_start();
     }else{
       echo
       '
-        <li class="nav-item">
-          <input class="form-control" type="text" placeholder="Usuario">
-        </li>
-        <li class="nav-item">
-          <input class="form-control" type="password" placeholder="Contraseña">
-        </li>
-        <li class="nav-item">
-          <input type="submit" class="btn btn-light" value="Login">
-        </li>
+      <form class="nav-item form-inline" action="index.php?accion=iniciarSesion" method="post" enctype="multipart/form-data">
         
+          <input name="txtnick" class="form-control" type="text" placeholder="Usuario">
+        
+        
+          <input name="txtpass" class="form-control" type="password" placeholder="Contraseña">
+        
+          <input name="submit" type="submit" class="btn btn-light" value="Login">
+      </form>  
       ';
     }
     ?>

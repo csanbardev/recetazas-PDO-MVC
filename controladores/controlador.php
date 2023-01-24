@@ -47,7 +47,7 @@ class controlador
     include_once 'vistas/inicio.php';
   }
 
-  public function listadoUsuario()
+  public function listadoUsuario($id)
   {
     // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
     $parametros = [
@@ -55,9 +55,9 @@ class controlador
       "datos" => NULL,
       "mensajes" => []
     ];
-    if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    if (isset($id) && is_numeric($id)) {
       // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-      $resultModelo = $this->modelo->listarEntradasUsuario($_GET['id']);
+      $resultModelo = $this->modelo->listarEntradasUsuario($id);
       // Si la consulta se realizó correctamente transferimos los datos obtenidos
       // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
       // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
@@ -113,5 +113,45 @@ class controlador
     $parametros["mensajes"] = $this->mensajes;
 
     include_once 'vistas/listado.php';
+  }
+
+  public function iniciarSesion(){
+    $parametros = [
+      "tituloventana" => "Blog | Inicio",
+      "datos" => null,
+      "mensajes" => []
+    ];
+
+    if(isset($_POST) && !empty($_POST) && isset($_POST['submit'])){
+      $nick = $_POST['txtnick'];
+      $password = $_POST['txtpass'];
+
+      $resultModelo = $this->modelo->obtenerUsuario($nick, $password);
+
+      if($resultModelo['correcto']){
+        $this->mensajes[] = [
+          "tipo" => "success",
+          "mensaje" => "Sesión iniciada con éxito"
+        ];
+        $parametros["datos"] = $resultModelo["datos"];
+        session_start();
+        $_SESSION['nick'] = $_POST["txtnick"];
+        $_SESSION['iniciada'] = true;
+
+      }else{
+        $this->mensajes[] = [
+          "tipo" => "danger",
+          "mensaje" => "Error al iniciar sesión <br /> ({$resultModelo["error"]})"
+        ];
+      }
+    }
+
+    $parametros['mensajes'] = $this->mensajes;
+
+    if($resultModelo['correcto']){
+      $_POST['txtnick'] == "user"? $this->listadoUsuario($parametros['datos']['id']) : $this->listadoAdmin();
+    }else{
+      $this->index();
+    }
   }
 }

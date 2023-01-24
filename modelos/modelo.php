@@ -178,7 +178,7 @@ class modelo
       "error" => NULL
   ];
 
-  if ($id && is_numeric($id)) {
+  if (is_numeric($id)) {
     try {
       $sql = "select * from entradas 
       inner join usuarios on entradas.usuario_id=usuarios.id
@@ -189,7 +189,7 @@ class modelo
       //Supervisamos que la consulta se realizó correctamente... 
       if ($query) {
         $return["correcto"] = true;
-        $return["datos"] = $query->fetch(PDO::FETCH_ASSOC);
+        $return["datos"] = $query->fetchAll(PDO::FETCH_ASSOC);
       }// o no :(
     } catch (PDOException $ex) {
       $return["error"] = $ex->getMessage();
@@ -200,4 +200,31 @@ class modelo
   return $return;
   }
 
+  public function obtenerUsuario($nick, $pass){
+    $return = [
+      "correcto" => false,
+      "datos" => null,
+      "error" => null
+    ];
+
+    if(isset($nick)&&isset($pass)){
+      try{
+        $sql = "select * from usuarios where nick=:nick and password=:pass";
+        $query = $this->conexion->prepare($sql);
+        $query->execute(['nick' => $nick, 'pass' => $pass]);
+
+        if($query){
+          $return["correcto"] = true;
+          $return["datos"] = $query->fetch(PDO::FETCH_ASSOC);
+        }
+      }catch(PDOException $ex){
+        $return["error"] = $ex->getMessage();
+      }
+    }
+
+    return $return;
+    
+  }
+
+  
 }
