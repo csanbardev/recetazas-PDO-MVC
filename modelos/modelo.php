@@ -101,14 +101,14 @@ class modelo
     //Inicializamos la transacción
     $this->conexion->beginTransaction();
     //Definimos la instrucción SQL parametrizada 
-    $sql = "INSERT INTO entrada(usuario_id,categoria_id,titulo,imagen, descripcion, fecha)
-                       VALUES (:usuario_id,:categoria_id,:titulo , :imagen, :descripcion, :fecha)";
+    $sql = "INSERT INTO entradas(usuario_id,categoria_id,titulo,imagen, descripcion, fecha)
+                       VALUES (:usuario_id,:categoria_id,:titulo, :imagen, :descripcion, :fecha)";
     // Preparamos la consulta...
     $query = $this->conexion->prepare($sql);
     // y la ejecutamos indicando los valores que tendría cada parámetro
     $query->execute([
-        'usuario_id' => $datos["usuario_id"],
-        'categoria_id' => $datos["categoria_id"],
+        'usuario_id' => $datos["id"],
+        'categoria_id' => $datos["categoria"],
         'titulo' => $datos["titulo"],
         'imagen' => $datos["imagen"],
         'descripcion' => $datos["descripcion"],
@@ -226,5 +226,27 @@ class modelo
     
   }
 
+  public function listarCategorias(){
+    $return = [
+      "correcto" => false,
+      "datos" => null,
+      "error" => null
+    ];
+
+    try {
+      $sql = "select * from categorias";
+
+      $resultsquery = $this->conexion->query($sql);
+
+      if ($resultsquery) {
+        $return['correcto'] = true;
+        $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+      }
+    } catch (PDOException $ex) {
+      $return['error'] = $ex->getMessage();
+    }
+
+    return $return;
+  }
   
 }

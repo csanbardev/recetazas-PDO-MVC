@@ -11,12 +11,11 @@
       <a class="nav-link" href="#">Link</a>
     </li>
     <li class="nav-item">
-      <a class="nav-link" href="#">Link</a>
-    </li>
-    <li class="nav-item">
       <a class="nav-link disabled" href="#">Disabled</a>
     </li>
     <?php
+
+    // TODO: illo, mete el acceso de entradas en el dropdown del usuario
     if (isset($_SESSION['iniciada']) && $_SESSION['iniciada']) {
 
       $html = '<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">';
@@ -34,7 +33,7 @@
 
       $html = $html.$_SESSION['id'];
       $html = $html.'">Entradas</a>
-      <a class="dropdown-item" href="#">Cerrar sesión</a>
+      <a class="dropdown-item" href="index.php?accion=addEntrada">Añadir</a>
     </div>
 </li>';
 

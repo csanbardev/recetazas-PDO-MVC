@@ -157,4 +157,116 @@ class controlador
       $this->index();
     }
   }
+
+  public function insertarEntrada($id){
+
+  }
+
+  public function addEntrada(){
+    
+    $errores = array();
+
+    // Actúa si se pulsa el botón de guardar
+    if(isset($_POST) && !empty($_POST) && isset($_POST['submit'])){
+      $id = $_POST['txtid'];
+      $titulo = $_POST['txttitulo'];
+      $descripcion = $_POST['txtdescripcion'];
+      $fecha = $_POST['dtfecha'];
+      $categoria = $_POST['slcategoria'];
+
+      // Cargamos la imagen al servidor
+      $imagen = null;
+
+      if(isset($_FILES['imagen']) && !empty($_FILES['imagen']['tmp_name'])){
+
+        // compruebo que exista el directorioa y si no lo creo
+        if(!is_dir('images')){
+          $dir = mkdir('images', 0777, true);
+        }else{
+          $dir = true;
+        }
+
+        if($dir){
+          $nombrefichimg = time(). "_" . $_FILES['imagen']['name'];
+
+          $movfichimg = move_uploaded_file($_FILES['imagen']['tmp_name'], "images/" . $nombrefichimg);
+          $imagen = $nombrefichimg;
+
+          if($movfichimg){
+            $imagendescargada = true;
+          }else{
+            $imagencargada = false;
+            $this->mensajes[] = [
+              "tipo" => "danger",
+              "mensaje" => "Error: la imagen no se ha cargado"
+            ];
+            $errores['imagen'] = "Error: la imagen no se ha cargado";
+          }
+        }
+
+        // si no hay errores, se registra la entrada
+        if (count($errores) == 0) {
+          $resultModelo = $this->modelo->addentrada([
+              'id' => $id,
+              'titulo' => $titulo,
+              "descripcion" => $descripcion,
+              'fecha' => $fecha,
+              'categoria' => $categoria,
+              'imagen' => $imagen
+          ]);
+          if ($resultModelo["correcto"]) :
+            $this->mensajes[] = [
+                "tipo" => "success",
+                "mensaje" => "La entrada se registró correctamente!! :)"
+            ];
+          else :
+            $this->mensajes[] = [
+                "tipo" => "danger",
+                "mensaje" => "La entrada no pudo registrarse!! :( <br />({$resultModelo["error"]})"
+            ];
+          endif;
+        } else {
+          $this->mensajes[] = [
+              "tipo" => "danger",
+              "mensaje" => "Datos de registro de entrada erróneos!! :("
+          ];
+        }
+
+      }
+    }
+
+
+
+    $parametros = [
+      "tituloventana" => "Blog | Añadir entrada",
+      "datos" => [
+        "txttitulo" => isset($titulo) ? $titulo : "",
+        "txtdescripcion" => isset($descripcion) ? $descripcion : "",
+        "dtfecha" => isset($fecha) ? $fecha : "",
+        "slcategoria" => isset($categoria) ? $categoria : "",
+        "imagen" => isset($imagen) ? $imagen : ""
+      ],
+      "categorias" => null,
+      "mensajes" => []
+    ];
+
+    $resultModelo = $this->modelo->listarCategorias();
+
+    if($resultModelo['correcto']){
+      $this->mensajes[] = [
+        "tipo" => "success",
+        "mensaje" => "Sesión iniciada con éxito"
+      ];
+      $parametros["categorias"] = $resultModelo["datos"];
+
+    }else{
+      $this->mensajes[] = [
+        "tipo" => "danger",
+        "mensaje" => "Error al iniciar sesión <br /> ({$resultModelo["error"]})"
+      ];
+    }
+    
+    $parametros['mensajes'] = $this->mensajes;
+    include_once 'vistas/addentrada.php';
+  }
 }
