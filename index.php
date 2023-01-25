@@ -7,7 +7,7 @@
     $accion = (string)filter_input(INPUT_GET, "accion", FILTER_UNSAFE_RAW);
 
     if(method_exists($controlador, $accion)){
-      if($accion == "actentrada" || $accion == "delentrada" || $accion == "listadoUsuario"){
+      if($accion == "actEntrada" || $accion == "delEntrada" || $accion == "listadoUsuario"){
         $id = filter_input(INPUT_GET, "id", FILTER_UNSAFE_RAW);
         $controlador->$accion($id);
       }else{

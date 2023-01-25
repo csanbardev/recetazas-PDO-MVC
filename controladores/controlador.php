@@ -158,9 +158,6 @@ class controlador
     }
   }
 
-  public function insertarEntrada($id){
-
-  }
 
   public function addEntrada(){
     
@@ -268,5 +265,33 @@ class controlador
     
     $parametros['mensajes'] = $this->mensajes;
     include_once 'vistas/addentrada.php';
+  }
+
+  public function delEntrada(){
+    if (isset($_GET['id']) && (is_numeric($_GET['id']))) {
+      $id = $_GET["id"];
+      //Realizamos la operación de suprimir el usuario con el id=$id
+      $resultModelo = $this->modelo->delEntrada($id);
+      //Analizamos el valor devuelto por el modelo para definir el mensaje a 
+      //mostrar en la vista listado
+      if ($resultModelo["correcto"]) :
+        $this->mensajes[] = [
+            "tipo" => "success",
+            "mensaje" => "Se eliminó correctamente la entrada"
+        ];
+      else :
+        $this->mensajes[] = [
+            "tipo" => "danger",
+            "mensaje" => "Algo ha fallado al elimninar la entrada <br/>({$resultModelo["error"]})"
+        ];
+      endif;
+    } else { //Si no recibimos el valor del parámetro $id generamos el mensaje indicativo:
+      $this->mensajes[] = [
+          "tipo" => "danger",
+          "mensaje" => "Error al acceder a la id de la entrada"
+      ];
+    }
+    //Relizamos el listado de los usuarios
+    $_SESSION['rol'] == "user"? $this->listadoUsuario($_SESSION['id']) : $this->listadoAdmin();
   }
 }

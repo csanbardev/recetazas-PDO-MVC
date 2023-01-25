@@ -180,10 +180,10 @@ class modelo
 
   if (is_numeric($id)) {
     try {
-      $sql = "select * from entradas 
+      $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
       inner join usuarios on entradas.usuario_id=usuarios.id
       inner join categorias on entradas.categoria_id=categorias.id
-        where entradas.usuario_id=:id";
+        where entradas.usuario_id=:id;";
       $query = $this->conexion->prepare($sql);
       $query->execute(['id' => $id]);
       //Supervisamos que la consulta se realizó correctamente... 
