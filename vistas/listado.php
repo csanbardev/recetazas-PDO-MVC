@@ -25,8 +25,7 @@
           <span class="badge badge-secondary"><?= $dato['nombre'] ?></span>
           <span class="badge badge-secondary"><?= $dato['fecha'] ?></span>
           <div class="pt-4">
-            <button class="btn btn-secondary">Detalle</button>
-            <button class="btn btn-secondary">Editar</button>
+            <a href=<?= 'index.php?accion=actEntrada&id=' . $dato['id'] ?> class="btn btn-secondary">Editar</a>
             <a class="btn btn-danger" data-toggle="modal" href="#myModal">Eliminar</a>
           </div>
         </div>

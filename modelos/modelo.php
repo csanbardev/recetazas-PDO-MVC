@@ -33,6 +33,33 @@ class modelo
     return $resultModelo;
   }
 
+  public function listarEntrada($id){
+    $return = [
+      "correcto" => false,
+      "datos" => null,
+      "error" => null
+    ];
+
+    try {
+      $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
+      inner join usuarios on entradas.usuario_id=usuarios.id
+      inner join categorias on entradas.categoria_id=categorias.id
+      where entradas.id=:id";
+
+      $query = $this->conexion->prepare($sql);
+      $query->execute(['id' => $id]);
+
+      if ($query) {
+        $return['correcto'] = true;
+        $return['datos'] = $query->fetch(PDO::FETCH_ASSOC);
+      }
+    } catch (PDOException $ex) {
+      $return['error'] = $ex->getMessage();
+    }
+
+    return $return;
+  }
+
   public function listarEntradas()
   {
     $return = [
@@ -127,7 +154,7 @@ class modelo
   return $return;
   }
 
-
+  
   public function actentrada($datos){
     $return = [
       "correcto" => false,

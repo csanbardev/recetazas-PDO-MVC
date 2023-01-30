@@ -34,6 +34,7 @@
       $html = $html.$_SESSION['id'];
       $html = $html.'">Entradas</a>
       <a class="dropdown-item" href="index.php?accion=addEntrada">Añadir</a>
+      <a class="dropdown-item" href="index.php?accion=cerrarSesion">Cerrar sesión</a>
     </div>
 </li>';
 
