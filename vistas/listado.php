@@ -20,7 +20,7 @@
         <img class="card-img-top" src=<?= 'images/' . $dato['imagen'] ?> alt="Card image">
         <div class="card-body">
           <h4 class="card-title"><?= $dato['titulo'] ?></h4>
-          <p class="card-text"><?= $dato['descripcion'] ?>.</p>
+          <p class="card-text"><?= $dato['descripcion'] ?></p>
           <span class="badge badge-primary">Autor: <?= $dato['nick'] ?></span><br>
           <span class="badge badge-secondary"><?= $dato['nombre'] ?></span>
           <span class="badge badge-secondary"><?= $dato['fecha'] ?></span>

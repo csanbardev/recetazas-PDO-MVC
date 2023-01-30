@@ -12,16 +12,19 @@
     <form <?='action=index.php?accion=actEntrada&id='. $_GET['id'] ?> method="POST" enctype="multipart/form-data">
       <label for="titulo">Título
         <input name="txttitulo" class="form-control" type="text" value="<?= $parametros["datos"]["txttitulo"] ?>">
+        <?= isset($parametros['errores']['txttitulo'])? '<div class="alert alert-danger">'.$parametros['errores']['txttitulo'].'</div>':"" ?>
       </label>
       <br>
       <label for="descripcion">Descripción
         <textarea name="txtdescripcion" class="form-control" name="" id="" cols="30" rows="10" >
         <?= $parametros["datos"]["txtdescripcion"] ?>
         </textarea>
+        <?= isset($parametros['errores']['txtdescripcion'])? '<div class="alert alert-danger">'.$parametros['errores']['txtdescripcion'].'</div>':"" ?>
       </label>
       <br>
       <label for="fecha">Inserta la fecha
         <input name="dtfecha" class="form-control" type="date" name="" id="" value="<?= $parametros["datos"]["dtfecha"] ?>">
+        <?= isset($parametros['errores']['dtfecha'])? '<div class="alert alert-danger">'.$parametros['errores']['dtfecha'].'</div>':"" ?>
       </label>
       <br>
       <?php
@@ -32,6 +35,8 @@
       <br>
       <label for="imagen">Inserta la imagen
         <input name="imagen" class="form-control" type="file" name="" id="" >
+        <?= isset($parametros['errores']['imagen'])? '<div class="alert alert-danger">'.$parametros['errores']['imagen'].'</div>':"" ?>
+
       </label>
       <br>
       <label for="categoria">Elige una categoría

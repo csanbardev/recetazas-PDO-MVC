@@ -185,10 +185,40 @@ class controlador
     // Actúa si se pulsa el botón de guardar
     if (isset($_POST) && !empty($_POST) && isset($_POST['submit'])) {
       $id = $_POST['txtid'];
-      $titulo = $_POST['txttitulo'];
-      $descripcion = $_POST['txtdescripcion'];
-      $fecha = $_POST['dtfecha'];
       $categoria = $_POST['slcategoria'];
+
+
+      // VALIDO LOS CAMPOS DEL FORMULARIO QUE LO NECESITEN
+
+      // validación del título
+      if (
+        !empty($_POST["txttitulo"])
+        && (strlen($_POST["txttitulo"]) <= 20)
+      ) {
+        $titulo = trim($_POST["txttitulo"]);
+        $titulo = filter_var($titulo, FILTER_UNSAFE_RAW);
+      } else {
+        $errores["txttitulo"] = "El título introducido no es válido :(";
+      }
+
+      // validación de la descripción
+      if (
+        !empty($_POST["txtdescripcion"])
+        && (strlen($_POST["txtdescripcion"]) <= 300)
+      ) {
+        $descripcion = trim($_POST["txtdescripcion"]);
+        $descripcion  = filter_var($descripcion, FILTER_UNSAFE_RAW);
+      } else {
+        $errores["txtdescripcion"] = "La descripcion introducida no es válida :(";
+      }
+
+      // validación de la fecha (que se haya asignado)
+      if (!empty($_POST['dtfecha'])) {
+        $fecha = $_POST['dtfecha'];
+      } else {
+        $errores["dtfecha"] = "Introduce una fecha";
+      }
+
 
       // Cargamos la imagen al servidor
       $imagen = null;
@@ -219,34 +249,35 @@ class controlador
             $errores['imagen'] = "Error: la imagen no se ha cargado";
           }
         }
-
-        // si no hay errores, se registra la entrada
-        if (count($errores) == 0) {
-          $resultModelo = $this->modelo->addentrada([
-            'id' => $id,
-            'titulo' => $titulo,
-            "descripcion" => $descripcion,
-            'fecha' => $fecha,
-            'categoria' => $categoria,
-            'imagen' => $imagen
-          ]);
-          if ($resultModelo["correcto"]) :
-            $this->mensajes[] = [
-              "tipo" => "success",
-              "mensaje" => "La entrada se registró correctamente!! :)"
-            ];
-          else :
-            $this->mensajes[] = [
-              "tipo" => "danger",
-              "mensaje" => "La entrada no pudo registrarse!! :( <br />({$resultModelo["error"]})"
-            ];
-          endif;
-        } else {
+      }else{ // si no hay imagen, lanza el error
+        $errores["imagen"] = "Introduce una imagen";
+      }
+      // si no hay errores, se registra la entrada
+      if (count($errores) == 0) {
+        $resultModelo = $this->modelo->addentrada([
+          'id' => $id,
+          'titulo' => $titulo,
+          "descripcion" => $descripcion,
+          'fecha' => $fecha,
+          'categoria' => $categoria,
+          'imagen' => $imagen
+        ]);
+        if ($resultModelo["correcto"]) :
+          $this->mensajes[] = [
+            "tipo" => "success",
+            "mensaje" => "La entrada se registró correctamente!! :)"
+          ];
+        else :
           $this->mensajes[] = [
             "tipo" => "danger",
-            "mensaje" => "Datos de registro de entrada erróneos!! :("
+            "mensaje" => "La entrada no pudo registrarse!! :( <br />({$resultModelo["error"]})"
           ];
-        }
+        endif;
+      } else {
+        $this->mensajes[] = [
+          "tipo" => "danger",
+          "mensaje" => "Datos de registro de entrada erróneos!! :("
+        ];
       }
     }
 
@@ -262,7 +293,8 @@ class controlador
         "imagen" => isset($imagen) ? $imagen : ""
       ],
       "categorias" => null,
-      "mensajes" => []
+      "mensajes" => [],
+      "errores" => $errores
     ];
 
     $resultModelo = $this->modelo->listarCategorias();
@@ -357,7 +389,31 @@ class controlador
       $nuevacategoria = $_POST['slcategoria'];
       $nuevaimagen = "";
 
-     
+      // VALIDO LOS CAMPOS DEL FORMULARIO
+
+      // validación del título
+      if (
+        !empty($_POST["txttitulo"])
+        && (strlen($_POST["txttitulo"]) <= 20)
+      ) {
+        $nuevotitulo = trim($_POST["txttitulo"]);
+        $nuevotitulo = filter_var($nuevotitulo, FILTER_UNSAFE_RAW);
+      } else {
+        $errores["txttitulo"] = "El título introducido no es válido :(";
+      }
+
+      // validación de la descripción
+      if (
+        !empty($_POST["txtdescripcion"])
+        && (strlen($_POST["txtdescripcion"]) <= 300)
+      ) {
+        $nuevadescripcion = trim($_POST["txtdescripcion"]);
+        $nuevadescripcion  = filter_var($nuevadescripcion, FILTER_UNSAFE_RAW);
+      } else {
+        $errores["txtdescripcion"] = "La descripcion introducida no es válida :(";
+      }
+
+
 
 
 
@@ -389,6 +445,8 @@ class controlador
             ];
           }
         }
+      } else {
+        $errores['imagen'] = "Introduce una imagen para la entrada";
       }
 
       $nuevaimagen = $imagen;
@@ -467,7 +525,8 @@ class controlador
         "txtusuario" => $valusuario
       ],
       "categorias" => null,
-      "mensajes" => $this->mensajes
+      "mensajes" => $this->mensajes,
+      "errores" => $errores
     ];
 
     $resultModelo = $this->modelo->listarCategorias();
