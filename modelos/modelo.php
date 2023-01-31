@@ -33,7 +33,8 @@ class modelo
     return $resultModelo;
   }
 
-  public function listarEntrada($id){
+  public function listarEntrada($id)
+  {
     $return = [
       "correcto" => false,
       "datos" => null,
@@ -69,7 +70,7 @@ class modelo
     ];
 
     try {
-      $sql = "select * from entradas 
+      $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
       inner join usuarios on entradas.usuario_id=usuarios.id
       inner join categorias on entradas.categoria_id=categorias.id";
 
@@ -118,54 +119,56 @@ class modelo
     return $return;
   }
 
-  public function addentrada($datos){
+  public function addentrada($datos)
+  {
     $return = [
       "correcto" => false,
       "error" => null
-  ];
+    ];
 
-  try {
-    //Inicializamos la transacción
-    $this->conexion->beginTransaction();
-    //Definimos la instrucción SQL parametrizada 
-    $sql = "INSERT INTO entradas(usuario_id,categoria_id,titulo,imagen, descripcion, fecha)
+    try {
+      //Inicializamos la transacción
+      $this->conexion->beginTransaction();
+      //Definimos la instrucción SQL parametrizada 
+      $sql = "INSERT INTO entradas(usuario_id,categoria_id,titulo,imagen, descripcion, fecha)
                        VALUES (:usuario_id,:categoria_id,:titulo, :imagen, :descripcion, :fecha)";
-    // Preparamos la consulta...
-    $query = $this->conexion->prepare($sql);
-    // y la ejecutamos indicando los valores que tendría cada parámetro
-    $query->execute([
+      // Preparamos la consulta...
+      $query = $this->conexion->prepare($sql);
+      // y la ejecutamos indicando los valores que tendría cada parámetro
+      $query->execute([
         'usuario_id' => $datos["id"],
         'categoria_id' => $datos["categoria"],
         'titulo' => $datos["titulo"],
         'imagen' => $datos["imagen"],
         'descripcion' => $datos["descripcion"],
         'fecha' => $datos["fecha"]
-    ]); //Supervisamos si la inserción se realizó correctamente... 
-    if ($query) {
-      $this->conexion->commit(); // commit() confirma los cambios realizados durante la transacción
-      $return["correcto"] = true;
-    }// o no :(
-  } catch (PDOException $ex) {
-    $this->conexion->rollback(); // rollback() se revierten los cambios realizados durante la transacción
-    $return["error"] = $ex->getMessage();
-    //die();
+      ]); //Supervisamos si la inserción se realizó correctamente... 
+      if ($query) {
+        $this->conexion->commit(); // commit() confirma los cambios realizados durante la transacción
+        $return["correcto"] = true;
+      } // o no :(
+    } catch (PDOException $ex) {
+      $this->conexion->rollback(); // rollback() se revierten los cambios realizados durante la transacción
+      $return["error"] = $ex->getMessage();
+      //die();
+    }
+
+    return $return;
   }
 
-  return $return;
-  }
 
-  
-  public function actentrada($datos){
+  public function actentrada($datos)
+  {
     $return = [
       "correcto" => false,
       "error" => null
-  ];
+    ];
 
-  try {
-    //Inicializamos la transacción
-    $this->conexion->beginTransaction();
-    //Definimos la instrucción SQL parametrizada 
-    $sql = "UPDATE entradas 
+    try {
+      //Inicializamos la transacción
+      $this->conexion->beginTransaction();
+      //Definimos la instrucción SQL parametrizada 
+      $sql = "UPDATE entradas 
       SET 
         usuario_id = :usuario_id, 
         categoria_id = :categoria_id, 
@@ -174,8 +177,8 @@ class modelo
         descripcion = :descripcion, 
         fecha = :fecha
           WHERE id=:id";
-    $query = $this->conexion->prepare($sql);
-    $query->execute([
+      $query = $this->conexion->prepare($sql);
+      $query->execute([
         'id' => $datos["id"],
         'usuario_id' => $datos["usuario_id"],
         'categoria_id' => $datos["categoria_id"],
@@ -183,77 +186,80 @@ class modelo
         'imagen' => $datos["imagen"],
         'descripcion' => $datos["descripcion"],
         'fecha' => $datos["fecha"]
-    ]);
-    //Supervisamos si la inserción se realizó correctamente... 
-    if ($query) {
-      $this->conexion->commit();  // commit() confirma los cambios realizados durante la transacción
-      $return["correcto"] = true;
-    }// o no :(
-  } catch (PDOException $ex) {
-    $this->conexion->rollback(); // rollback() se revierten los cambios realizados durante la transacción
-    $return["error"] = $ex->getMessage();
-    //die();
+      ]);
+      //Supervisamos si la inserción se realizó correctamente... 
+      if ($query) {
+        $this->conexion->commit();  // commit() confirma los cambios realizados durante la transacción
+        $return["correcto"] = true;
+      } // o no :(
+    } catch (PDOException $ex) {
+      $this->conexion->rollback(); // rollback() se revierten los cambios realizados durante la transacción
+      $return["error"] = $ex->getMessage();
+      //die();
+    }
+
+    return $return;
   }
 
-  return $return;
-  }
-
-  public function listarEntradasUsuario($id){
+  public function listarEntradasUsuario($id)
+  {
     $return = [
       "correcto" => FALSE,
       "datos" => NULL,
       "error" => NULL
-  ];
+    ];
 
-  if (is_numeric($id)) {
-    try {
-      $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
+    if (is_numeric($id)) {
+      try {
+        $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
       inner join usuarios on entradas.usuario_id=usuarios.id
       inner join categorias on entradas.categoria_id=categorias.id
-        where entradas.usuario_id=:id;";
-      $query = $this->conexion->prepare($sql);
-      $query->execute(['id' => $id]);
-      //Supervisamos que la consulta se realizó correctamente... 
-      if ($query) {
-        $return["correcto"] = true;
-        $return["datos"] = $query->fetchAll(PDO::FETCH_ASSOC);
-      }// o no :(
-    } catch (PDOException $ex) {
-      $return["error"] = $ex->getMessage();
-      //die();
+        where entradas.usuario_id=:id
+        order by entradas.fecha desc;";
+        $query = $this->conexion->prepare($sql);
+        $query->execute(['id' => $id]);
+        //Supervisamos que la consulta se realizó correctamente... 
+        if ($query) {
+          $return["correcto"] = true;
+          $return["datos"] = $query->fetchAll(PDO::FETCH_ASSOC);
+        } // o no :(
+      } catch (PDOException $ex) {
+        $return["error"] = $ex->getMessage();
+        //die();
+      }
     }
+
+    return $return;
   }
 
-  return $return;
-  }
-
-  public function obtenerUsuario($nick, $pass){
+  public function obtenerUsuario($nick, $pass)
+  {
     $return = [
       "correcto" => false,
       "datos" => null,
       "error" => null
     ];
 
-    if(isset($nick)&&isset($pass)){
-      try{
+    if (isset($nick) && isset($pass)) {
+      try {
         $sql = "select * from usuarios where nick=:nick and password=:pass";
         $query = $this->conexion->prepare($sql);
         $query->execute(['nick' => $nick, 'pass' => $pass]);
 
-        if($query){
+        if ($query) {
           $return["correcto"] = true;
           $return["datos"] = $query->fetch(PDO::FETCH_ASSOC);
         }
-      }catch(PDOException $ex){
+      } catch (PDOException $ex) {
         $return["error"] = $ex->getMessage();
       }
     }
 
     return $return;
-    
   }
 
-  public function listarCategorias(){
+  public function listarCategorias()
+  {
     $return = [
       "correcto" => false,
       "datos" => null,
@@ -275,5 +281,4 @@ class modelo
 
     return $return;
   }
-  
 }

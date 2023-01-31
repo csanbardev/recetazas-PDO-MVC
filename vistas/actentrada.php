@@ -44,14 +44,14 @@
           <?php
           foreach ($parametros['categorias'] as $ctg) :
           ?>
-            <option value=<?= $ctg['id'] ?>><?= $ctg['nombre'] ?></option>
+            <option <?= $parametros['datos']['slcategoria']==$ctg['id']? 'selected':'' ?> value=<?= $ctg['id'] ?>><?= $ctg['nombre'] ?></option>
           <?php endforeach; ?>
 
         </select>
       </label>
       <br>
       <input type="hidden" name="txtid" value=<?= $_GET['id']?>>
-      <input type="hidden" name="txtusuario" value="<?= $parametros["datos"]["txtusuario"] ?>">
+      <input type="hidden" name="txtusuario" value="<?= $parametros["datos"]["txtusuario"] ?>" >
       <input class="btn btn-primary" type="submit" name="submit">
     </form>
   </div>
