@@ -16,7 +16,7 @@
       </label>
       <br>
       <label for="descripcion">Descripción
-        <textarea name="txtdescripcion" class="form-control" name="" id="" cols="30" rows="10" >
+        <textarea name="txtdescripcion" class="form-control" name="" id="txtdescripcion" cols="30" rows="10" >
         <?= $parametros["datos"]["txtdescripcion"] ?>
         </textarea>
         <?= isset($parametros['errores']['txtdescripcion'])? '<div class="alert alert-danger">'.$parametros['errores']['txtdescripcion'].'</div>':"" ?>
@@ -55,6 +55,12 @@
       <input class="btn btn-primary" type="submit" name="submit">
     </form>
   </div>
+
+  <script>
+    CKEDITOR.replace('txtdescripcion', {
+      height: '500px',
+    });
+  </script>
 </body>
 
 </html>

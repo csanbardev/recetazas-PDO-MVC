@@ -13,5 +13,10 @@
 
   <!-- Latest compiled JavaScript -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+  <script src="http://cdn.ckeditor.com/4.5.4/standard/ckeditor.js"></script>
+
+
   <title><?= $parametros["tituloventana"] ?></title>
 </head>
