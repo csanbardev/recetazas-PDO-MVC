@@ -297,9 +297,11 @@ class modelo
         $query = $this->conexion->prepare($sql);
         $query->execute(['nick' => $nick, 'pass' => $pass]);
 
-        if ($query) {
+        if ($return["datos"] = $query->fetch(PDO::FETCH_ASSOC)) {
           $return["correcto"] = true;
-          $return["datos"] = $query->fetch(PDO::FETCH_ASSOC);
+        }else{
+          $return['corrector'] = false;
+          $return['error'] = "La contraseña o el usuario no existen";
         }
       } catch (PDOException $ex) {
         $return["error"] = $ex->getMessage();

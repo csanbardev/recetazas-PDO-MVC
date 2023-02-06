@@ -15,7 +15,7 @@
     </li>
     <?php
 
-    // TODO: illo, mete el acceso de entradas en el dropdown del usuario
+    
     if (isset($_SESSION['iniciada']) && $_SESSION['iniciada']) {
 
       $html = '<li class="nav-item dropdown"><a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">';
@@ -32,9 +32,12 @@
       } 
 
       $html = $html.$_SESSION['id'];
-      $html = $html.'">Entradas</a>
-      <a class="dropdown-item" href="index.php?accion=addEntrada">Añadir</a>
-      <a class="dropdown-item" href="index.php?accion=cerrarSesion">Cerrar sesión</a>
+      $html = $html.'">Entradas</a>';
+      if($_SESSION['rol']=='user'){ // el usuario podrá añadir entradas, el admin no
+        $html = $html.'<a class="dropdown-item" href="index.php?accion=addEntrada">Añadir</a>';
+      }
+      $html = $html.
+      '<a class="dropdown-item" href="index.php?accion=cerrarSesion">Cerrar sesión</a>
     </div>
 </li>';
 
