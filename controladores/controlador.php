@@ -23,7 +23,8 @@ class controlador
     $parametros = [
       "tituloventana" => "Blog | Últimas entradas",
       "datos" => null,
-      "mensajes" => []
+      "mensajes" => [],
+      "paginacion" => null
     ];
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
     $resultModelo = $this->modelo->listarEntradas();
@@ -32,6 +33,7 @@ class controlador
     // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
     if ($resultModelo["correcto"]) :
       $parametros["datos"] = $resultModelo["datos"];
+      $parametros["paginacion"] = $resultModelo['paginacion'];
       //Definimos el mensaje para el alert de la vista de que todo fue correctamente
       $this->mensajes[] = [
         "tipo" => "success",
@@ -60,7 +62,8 @@ class controlador
     $parametros = [
       "tituloventana" => "Blog | Usuario",
       "datos" => NULL,
-      "mensajes" => []
+      "mensajes" => [],
+      "paginacion" => null
     ];
     if (isset($id) && is_numeric($id)) {
       // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
@@ -70,6 +73,7 @@ class controlador
       // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
       if ($resultModelo["correcto"]) :
         $parametros["datos"] = $resultModelo["datos"];
+        $parametros['paginacion'] = $resultModelo['paginacion'];
         //Definimos el mensaje para el alert de la vista de que todo fue correctamente
         $this->mensajes[] = [
           "tipo" => "success",
@@ -98,7 +102,8 @@ class controlador
     $parametros = [
       "tituloventana" => "Blog | Administrador",
       "datos" => null,
-      "mensajes" => []
+      "mensajes" => [],
+      "paginacion" => null
     ];
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
     $resultModelo = $this->modelo->listarEntradas();
@@ -107,6 +112,7 @@ class controlador
     // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
     if ($resultModelo["correcto"]) :
       $parametros["datos"] = $resultModelo["datos"];
+      $parametros['paginacion'] = $resultModelo['paginacion'];
       //Definimos el mensaje para el alert de la vista de que todo fue correctamente
       $this->mensajes[] = [
         "tipo" => "success",
