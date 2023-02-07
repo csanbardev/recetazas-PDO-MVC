@@ -21,6 +21,8 @@ class controlador
    */
   public function index()
   {
+    $orden = "desc"; // por defecto, el orden será descendente
+
     // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
     $parametros = [
       "tituloventana" => "Blog | Últimas entradas",
@@ -28,8 +30,15 @@ class controlador
       "mensajes" => [],
       "paginacion" => null
     ];
+
+    // si se especifica el orden, lo aplicamos aquí
+    if (isset($_GET['orden'])) {
+      $orden = $_GET['orden'];
+    }
+
+
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-    $resultModelo = $this->modelo->listarEntradas();
+    $resultModelo = $this->modelo->listarEntradas($orden);
     // Si la consulta se realizó correctamente transferimos los datos obtenidos
     // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
     // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
@@ -60,6 +69,7 @@ class controlador
    */
   public function listadoUsuario($id)
   {
+    $orden = "desc"; // por defecto el orden será descendente
     // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
     $parametros = [
       "tituloventana" => "Blog | Usuario",
@@ -68,8 +78,12 @@ class controlador
       "paginacion" => null
     ];
     if (isset($id) && is_numeric($id)) {
+      // comprobamos que se haya especificado un orden
+      if (isset($_GET['orden'])) {
+        $orden = $_GET['orden'];
+      }
       // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-      $resultModelo = $this->modelo->listarEntradasUsuario($id);
+      $resultModelo = $this->modelo->listarEntradasUsuario($id, $orden);
       // Si la consulta se realizó correctamente transferimos los datos obtenidos
       // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
       // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
@@ -101,14 +115,22 @@ class controlador
    */
   public function listadoAdmin()
   {
+    $orden = "desc"; // por defecto, el orden será descendente
+
     $parametros = [
       "tituloventana" => "Blog | Administrador",
       "datos" => null,
       "mensajes" => [],
       "paginacion" => null
     ];
+
+    // comprobamos si se ha especificado un orden
+    if(isset($_GET['orden'])){
+      $orden = $_GET['orden'];
+    }
+
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-    $resultModelo = $this->modelo->listarEntradas();
+    $resultModelo = $this->modelo->listarEntradas($orden);
     // Si la consulta se realizó correctamente transferimos los datos obtenidos
     // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
     // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
@@ -576,17 +598,17 @@ class controlador
         "tipo" => "success",
         "mensaje" => "El listado se realizó correctamente"
       ];
-      
+
       // hacemos la impresión en pdf
       $html2pdf = new Html2Pdf();
       $html2pdf->writeHTML("<h1>Listado de entradas</h1>");
 
-      foreach($parametros["datos"] as $dato){
-        $html2pdf->writeHTML('Titulo: '. $dato['titulo']. '<br>');
-        $html2pdf->writeHTML('Descripción: '. $dato['descripcion']. '<br>');
-        $html2pdf->writeHTML('Autor: '. $dato['nick']. '<br>');
-        $html2pdf->writeHTML('Categoría: '. $dato['nombre']. '<br>');
-        $html2pdf->writeHTML('Fecha de publicación: '. $dato['fecha']. '<br>');
+      foreach ($parametros["datos"] as $dato) {
+        $html2pdf->writeHTML('Titulo: ' . $dato['titulo'] . '<br>');
+        $html2pdf->writeHTML('Descripción: ' . $dato['descripcion'] . '<br>');
+        $html2pdf->writeHTML('Autor: ' . $dato['nick'] . '<br>');
+        $html2pdf->writeHTML('Categoría: ' . $dato['nombre'] . '<br>');
+        $html2pdf->writeHTML('Fecha de publicación: ' . $dato['fecha'] . '<br>');
         // $html2pdf->writeHTML('Imagen: '. '<img style="width:100px;height:100px;" src=images/' . $dato['imagen']. 'alt="Card image">');
         $html2pdf->writeHTML('_______________________________________<br>');
       }

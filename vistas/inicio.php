@@ -10,6 +10,17 @@
     <?php foreach ($parametros["mensajes"] as $mensaje) : ?>
       <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
     <?php endforeach; ?>
+
+    <div class="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        Ordenar por fecha
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="index.php?orden=desc">Más reciente primero</a>
+        <a class="dropdown-item" href="index.php?orden=asc">Más antiguo primero</a>
+      </div>
+    </div>
+    <br>
     <div class="row">
 
       <?php foreach ($parametros["datos"] as $dato) :
@@ -32,39 +43,52 @@
     </div>
 
     <?php //Sólo mostramos los enlaces a páginas si existen registros a mostrar
-      if($parametros['paginacion']['totalregistros']>=1):  
+    if ($parametros['paginacion']['totalregistros'] >= 1) :
     ?>
-    <nav aria-label="Page navigation example" class="text-center">
-      <ul class="pagination">
-       
-        <?php 
-         //Comprobamos si estamos en la primera página. Si es así, deshabilitamos el botón 'anterior'
-          if($parametros['paginacion']['pagina']==1): ?>
-            <li class="page-item disabled"><a class="page-link" href="#">&laquo;</a></li>
-          <?php else: ?>
-            <li class="page-item"><a class="page-link" href="index.php?pagina=<?php echo $parametros['paginacion']['pagina']-1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?>"> &laquo;</a></li>
-         <?php  
+      <nav aria-label="Page navigation example" class="text-center">
+        <ul class="pagination">
+
+          <?php
+          //Comprobamos si estamos en la primera página. Si es así, deshabilitamos el botón 'anterior'
+          if ($parametros['paginacion']['pagina'] == 1) : ?>
+            <li class="page-item disabled"><a class="page-link" href="#<?= isset($_GET['orden']) ? '?orden=' . $_GET['orden'] : "" ?>">&laquo;</a></li>
+          <?php else : ?>
+            <li class="page-item"><a class="page-link" href="index.php?pagina=<?php echo $parametros['paginacion']['pagina'] - 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?><?= isset($_GET['orden']) ? '&orden=' . $_GET['orden'] : "" ?>"> &laquo;</a></li>
+          <?php
           endif;
           //Mostramos como activos el botón de la página actual
-          for($i=1;$i<=$parametros['paginacion']['numpaginas'];$i++){
-            if($parametros['paginacion']['pagina']==$i){
-              echo '<li class="page-item active"> 
-                <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">'. $i .'</a></li>';
-             }else {
-              echo '<li class="page-item"> 
-                <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">'. $i .'</a></li>';
+          for ($i = 1; $i <= $parametros['paginacion']['numpaginas']; $i++) {
+            if ($parametros['paginacion']['pagina'] == $i) {
+              // compruebo que se haya indicado un orden
+              if (isset($_GET['orden'])) {
+                echo '<li class="page-item active"> 
+                <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '&orden=' . $_GET['orden'] . '">' . $i . '</a></li>';
+              } else {
+                echo '<li class="page-item active"> 
+                <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">' . $i . '</a></li>';
+              }
+            } else {
+              // compruebo que se haya indicado un orden
+              if (isset($_GET['orden'])) {
+                echo '<li class="page-item"> 
+                <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] .'&orden=' . $_GET['orden'] . '">' . $i . '</a></li>';
+              } else {
+                echo '<li class="page-item"> 
+                  <a class="page-link" href="index.php?pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">' . $i . '</a></li>';
+              }
             }
           }
-         //Comprobamos si estamos en la última página. Si es así, deshabilitamos el botón 'siguiente'
-          if($parametros['paginacion']['pagina']==$parametros['paginacion']['numpaginas']): ?>  
-             <li class="page-item disabled"><a class="page-link" href="#">&raquo;</a></li>
-          <?php else: ?>
-            <li class="page-item"><a class="page-link" href="index.php?pagina=<?php echo $parametros['paginacion']['pagina']+1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?>"> &raquo; </a></li>
-          <?php endif; ?>    
-      </ul>         
-    </nav>
-    <?php endif;  //if($totalregistros>=1): ?>
-    <a href="index.php?accion=imprimirEntradas" class="btn btn-primary">Imprimir en pdf</a>  
+          //Comprobamos si estamos en la última página. Si es así, deshabilitamos el botón 'siguiente'
+          if ($parametros['paginacion']['pagina'] == $parametros['paginacion']['numpaginas']) : ?>
+            <li class="page-item disabled"><a class="page-link" href="#">&raquo;</a></li>
+          <?php else : ?>
+            <li class="page-item"><a class="page-link" href="index.php?pagina=<?php echo $parametros['paginacion']['pagina'] + 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?><?= isset($_GET['orden'])?'&orden='.$_GET['orden']:""?>"> &raquo; </a></li>
+          <?php endif; ?>
+        </ul>
+      </nav>
+    <?php endif;  //if($totalregistros>=1): 
+    ?>
+    <a href="index.php?accion=imprimirEntradas" class="btn btn-primary">Imprimir en pdf</a>
   </div>
 </body>
 

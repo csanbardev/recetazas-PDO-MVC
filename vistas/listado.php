@@ -8,8 +8,18 @@
     <?php foreach ($parametros["mensajes"] as $mensaje) : ?>
       <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
     <?php endforeach; ?>
-
-
+    <h1>Entradas de <?=$_SESSION['nick']?></h1>  
+    <br>
+    <div class="dropdown">
+      <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+        Ordenar por fecha
+      </button>
+      <div class="dropdown-menu">
+        <a class="dropdown-item" href="index.php?accion=<?= $_GET['accion']?>&id=<?= $_GET['id']?>&orden=desc">Más reciente primero</a>
+        <a class="dropdown-item" href="index.php?accion=<?= $_GET['accion']?>&id=<?= $_GET['id']?>&orden=asc">Más antiguo primero</a>
+      </div>
+    </div>
+    <br>  
     <div class="row">
 
       <?php
@@ -75,30 +85,38 @@
           if ($parametros['paginacion']['pagina'] == 1) : ?>
             <li class="page-item disabled"><a class="page-link" href="#">&laquo;</a></li>
           <?php else : ?>
-            <li class="page-item"><a class="page-link" href="index.php?<?= $_SESSION['rol'] == 'user' ? 'accion=listadoUser' : 'accion=listadoAdmin' ?>&pagina=<?php echo $parametros['paginacion']['pagina'] - 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?>"> &laquo;</a></li>
+            <li class="page-item"><a class="page-link" href="index.php?<?= $_SESSION['rol'] == 'user' ? 'accion=listadoUsuario' : 'accion=listadoAdmin' ?>&pagina=<?php echo $parametros['paginacion']['pagina'] - 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?><?= isset($_GET['orden'])?'&orden='.$_GET['orden']:""?><?='&id='.$_SESSION['id']?>"> &laquo;</a></li>
           <?php
           endif;
           //Mostramos como activos el botón de la página actual
           for ($i = 1; $i <= $parametros['paginacion']['numpaginas']; $i++) {
+            $orden = "&orden=desc"; // etiqueta de orden por defecto que aparecerá
+
+            // si se especifica el orden, redefinimos la anterior variable
+            if(isset($_GET['orden'])){
+              $orden = "&orden=".$_GET['orden'];
+            }
+
+
             if ($parametros['paginacion']['pagina'] == $i && $_SESSION['rol'] == 'user') {
               echo '<li class="page-item active"> 
-                <a class="page-link" href="index.php?accion=listadoUser&pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">' . $i . '</a></li>';
+                <a class="page-link" href="index.php?accion=listadoUsuario&pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] .$orden.'&id='.$_SESSION['id'].'">' . $i . '</a></li>';
             } else if ($parametros['paginacion']['pagina'] == $i && $_SESSION['rol'] == 'admin') {
               echo '<li class="page-item active"> 
-              <a class="page-link" href="index.php?accion=listadoAdmin&pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">' . $i . '</a></li>';
+              <a class="page-link" href="index.php?accion=listadoAdmin&pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'].$orden.'&id='.$_SESSION['id']. '">' . $i . '</a></li>';
             } else if ($_SESSION['rol'] == 'user') {
               echo '<li class="page-item"> 
-                <a class="page-link" href="index.php?accion=listadoUser&pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">' . $i . '</a></li>';
+                <a class="page-link" href="index.php?accion=listadoUsuario&pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] .$orden.'&id='.$_SESSION['id']. '">' . $i . '</a></li>';
             } else {
               echo '<li class="page-item"> 
-                <a class="page-link" href="index.php?accion=listadoAdmin&pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] . '">' . $i . '</a></li>';
+                <a class="page-link" href="index.php?accion=listadoAdmin&pagina=' . $i . '&regsxpag=' . $parametros['paginacion']['regsxpag'] .$orden.'&id='.$_SESSION['id']. '">' . $i . '</a></li>';
             }
           }
           //Comprobamos si estamos en la última página. Si es así, deshabilitamos el botón 'siguiente'
           if ($parametros['paginacion']['pagina'] == $parametros['paginacion']['numpaginas']) : ?>
             <li class="page-item disabled"><a class="page-link" href="#">&raquo;</a></li>
           <?php else : ?>
-            <li class="page-item"><a class="page-link" href="index.php?<?= $_SESSION['rol'] == 'user' ? 'accion=listadoUser' : 'accion=listadoAdmin' ?>&pagina=<?php echo $parametros['paginacion']['pagina'] + 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?>"> &raquo; </a></li>
+            <li class="page-item"><a class="page-link" href="index.php?<?= $_SESSION['rol'] == 'user' ? 'accion=listadoUsuario' : 'accion=listadoAdmin' ?>&pagina=<?php echo $parametros['paginacion']['pagina'] + 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?><?= isset($_GET['orden'])?'&orden='.$_GET['orden']:""?><?='&id='.$_SESSION['id']?>"> &raquo; </a></li>
           <?php endif; ?>
         </ul>
       </nav>

@@ -33,7 +33,8 @@ class modelo
     return $resultModelo;
   }
 
-  public function listarTodas(){
+  public function listarTodas()
+  {
     $return = [
       "correcto" => false,
       "datos" => null,
@@ -41,7 +42,7 @@ class modelo
     ];
 
     try {
-      
+
 
 
       $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
@@ -53,7 +54,6 @@ class modelo
       if ($resultsquery) {
         $return['correcto'] = true;
         $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
-
       }
     } catch (PDOException $ex) {
       $return['error'] = $ex->getMessage();
@@ -93,7 +93,7 @@ class modelo
     return $return;
   }
 
-  public function listarEntradas()
+  public function listarEntradas($orden)
   {
     $return = [
       "correcto" => false,
@@ -115,7 +115,7 @@ class modelo
 
       $sql = "select SQL_CALC_FOUND_ROWS entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
       inner join usuarios on entradas.usuario_id=usuarios.id
-      inner join categorias on entradas.categoria_id=categorias.id limit $inicio, $regsxpag";
+      inner join categorias on entradas.categoria_id=categorias.id order by entradas.fecha $orden limit $inicio, $regsxpag";
 
       $resultsquery = $this->conexion->prepare($sql);
       $resultsquery->execute();
@@ -255,7 +255,7 @@ class modelo
     return $return;
   }
 
-  public function listarEntradasUsuario($id)
+  public function listarEntradasUsuario($id,$orden)
   {
     $return = [
       "correcto" => FALSE,
@@ -282,7 +282,7 @@ class modelo
       inner join categorias on entradas.categoria_id=categorias.id
         where entradas.usuario_id=:id
         
-        order by entradas.fecha desc
+        order by entradas.fecha $orden
         limit $inicio, $regsxpag";
 
         $query = $this->conexion->prepare($sql);
@@ -328,7 +328,7 @@ class modelo
 
         if ($return["datos"] = $query->fetch(PDO::FETCH_ASSOC)) {
           $return["correcto"] = true;
-        }else{
+        } else {
           $return['corrector'] = false;
           $return['error'] = "La contraseña o el usuario no existen";
         }
