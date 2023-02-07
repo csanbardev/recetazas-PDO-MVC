@@ -33,6 +33,35 @@ class modelo
     return $resultModelo;
   }
 
+  public function listarTodas(){
+    $return = [
+      "correcto" => false,
+      "datos" => null,
+      "error" => null
+    ];
+
+    try {
+      
+
+
+      $sql = "select entradas.id, entradas.usuario_id, entradas.categoria_id, entradas.titulo, entradas.imagen, entradas.descripcion, entradas.fecha, usuarios.nick, categorias.nombre from entradas 
+      inner join usuarios on entradas.usuario_id=usuarios.id
+      inner join categorias on entradas.categoria_id=categorias.id";
+
+      $resultsquery = $this->conexion->prepare($sql);
+      $resultsquery->execute();
+      if ($resultsquery) {
+        $return['correcto'] = true;
+        $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+
+      }
+    } catch (PDOException $ex) {
+      $return['error'] = $ex->getMessage();
+    }
+
+    return $return;
+  }
+
   public function listarEntrada($id)
   {
     $return = [

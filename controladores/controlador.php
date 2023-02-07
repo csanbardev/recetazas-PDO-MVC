@@ -1,6 +1,8 @@
 <?php
 require_once 'modelos/modelo.php';
+require_once './vendor/autoload.php';
 
+use Spipu\Html2Pdf\Html2Pdf;
 
 class controlador
 {
@@ -255,7 +257,7 @@ class controlador
             $errores['imagen'] = "Error: la imagen no se ha cargado";
           }
         }
-      }else{ // si no hay imagen, lanza el error
+      } else { // si no hay imagen, lanza el error
         $errores["imagen"] = "Introduce una imagen";
       }
       // si no hay errores, se registra la entrada
@@ -553,5 +555,56 @@ class controlador
     $parametros['mensajes'] = $this->mensajes;
     //Mostramos la vista actentrada
     include_once 'vistas/actentrada.php';
+  }
+
+  public function imprimirEntradas()
+  {
+    $parametros = [
+      "tituloventana" => "Blog | Últimas entradas",
+      "datos" => null,
+      "mensajes" => []
+    ];
+    // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
+    $resultModelo = $this->modelo->listarTodas();
+    // Si la consulta se realizó correctamente transferimos los datos obtenidos
+    // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
+    // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
+    if ($resultModelo["correcto"]) :
+      $parametros["datos"] = $resultModelo["datos"];
+      //Definimos el mensaje para el alert de la vista de que todo fue correctamente
+      $this->mensajes[] = [
+        "tipo" => "success",
+        "mensaje" => "El listado se realizó correctamente"
+      ];
+      
+      // hacemos la impresión en pdf
+      $html2pdf = new Html2Pdf();
+      $html2pdf->writeHTML("<h1>Listado de entradas</h1>");
+
+      foreach($parametros["datos"] as $dato){
+        $html2pdf->writeHTML('Titulo: '. $dato['titulo']. '<br>');
+        $html2pdf->writeHTML('Descripción: '. $dato['descripcion']. '<br>');
+        $html2pdf->writeHTML('Autor: '. $dato['nick']. '<br>');
+        $html2pdf->writeHTML('Categoría: '. $dato['nombre']. '<br>');
+        $html2pdf->writeHTML('Fecha de publicación: '. $dato['fecha']. '<br>');
+        // $html2pdf->writeHTML('Imagen: '. '<img style="width:100px;height:100px;" src=images/' . $dato['imagen']. 'alt="Card image">');
+        $html2pdf->writeHTML('_______________________________________<br>');
+      }
+
+
+
+      $html2pdf->output();
+    else :
+      //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+      $this->mensajes[] = [
+        "tipo" => "danger",
+        "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$resultModelo["error"]})"
+      ];
+    endif;
+    //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
+    //'mensaje', que recoge cómo finalizó la operación:
+    $parametros["mensajes"] = $this->mensajes;
+
+    include_once 'vistas/inicio.php';
   }
 }

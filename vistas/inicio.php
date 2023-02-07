@@ -64,6 +64,7 @@
       </ul>         
     </nav>
     <?php endif;  //if($totalregistros>=1): ?>
+    <a href="index.php?accion=imprimirEntradas" class="btn btn-primary">Imprimir en pdf</a>  
   </div>
 </body>
 
