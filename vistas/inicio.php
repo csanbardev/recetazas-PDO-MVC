@@ -22,7 +22,7 @@
     </div>
     <br>
     <div class="row">
-
+      <?php $formato ?>
       <?php foreach ($parametros["datos"] as $dato) :
       ?>
 
@@ -33,7 +33,7 @@
             <p class="card-text"><?= $dato['descripcion'] ?></p>
             <span class="badge badge-primary">Autor: <?= $dato['nick'] ?></span><br>
             <span class="badge badge-secondary"><?= $dato['nombre'] ?></span>
-            <span class="badge badge-secondary"><?= $dato['fecha'] ?></span>
+            <span class="badge badge-secondary"><?= date("d-m-Y",strtotime($dato['fecha'])) ?></span>
           </div>
         </div>
 

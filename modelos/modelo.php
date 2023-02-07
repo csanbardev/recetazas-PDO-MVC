@@ -255,7 +255,7 @@ class modelo
     return $return;
   }
 
-  public function listarEntradasUsuario($id,$orden)
+  public function listarEntradasUsuario($id, $orden)
   {
     $return = [
       "correcto" => FALSE,
