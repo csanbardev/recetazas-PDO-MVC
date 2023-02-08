@@ -15,8 +15,8 @@
         Ordenar por fecha
       </button>
       <div class="dropdown-menu">
-        <a class="dropdown-item" href="index.php?accion=<?= $_GET['accion']?>&id=<?= $_GET['id']?>&orden=desc">Más reciente primero</a>
-        <a class="dropdown-item" href="index.php?accion=<?= $_GET['accion']?>&id=<?= $_GET['id']?>&orden=asc">Más antiguo primero</a>
+        <a class="dropdown-item" href="index.php?accion=<?= $_GET['accion']?>&id=<?= $_SESSION['id']?>&orden=desc">Más reciente primero</a>
+        <a class="dropdown-item" href="index.php?accion=<?= $_GET['accion']?>&id=<?= $_SESSION['id']?>&orden=asc">Más antiguo primero</a>
       </div>
     </div>
     <br>  
@@ -73,7 +73,7 @@
       ?>
 
     </div>
-
+    <br>    
     <?php //Sólo mostramos los enlaces a páginas si existen registros a mostrar
     if ($parametros['paginacion']['totalregistros'] >= 1) :
     ?>

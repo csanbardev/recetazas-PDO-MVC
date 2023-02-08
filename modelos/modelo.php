@@ -329,7 +329,6 @@ class modelo
         if ($return["datos"] = $query->fetch(PDO::FETCH_ASSOC)) {
           $return["correcto"] = true;
         } else {
-          $return['corrector'] = false;
           $return['error'] = "La contraseña o el usuario no existen";
         }
       } catch (PDOException $ex) {
@@ -363,4 +362,30 @@ class modelo
 
     return $return;
   }
+
+  public function insertarlog($datos){
+    $return = [
+      "corrector" => false,
+      "error" => null
+    ];
+    try{
+      $sql = "call insertarLog(:fecha, :hora, :operacion, :usuario)";
+      $query = $this->conexion->prepare($sql);
+      $query->execute([
+        'fecha' => $datos['fecha'],
+        'hora' => $datos['hora'],
+        'operacion' => $datos['operacion'],
+        'usuario' => $datos['usuario']
+      ]);
+
+      if($query){
+        $return['correcto'] = true;
+      }
+
+    }catch(PDOException $ex){
+      $return['error'] = $ex->getMessage();
+    }
+    return $return;
+  }
+
 }

@@ -95,6 +95,16 @@ class controlador
           "tipo" => "success",
           "mensaje" => "El listado se realizó correctamente"
         ];
+
+        // inserto el registro de logs
+        $resultModelo = $this->modelo->insertarlog([
+          "fecha" => date('y-m-d'),
+          'hora' => date('H:i:s'),
+          "operacion" => 'listar entradas',
+          "usuario" => $_SESSION['nick']
+        ]);
+
+
       else :
         //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
         $this->mensajes[] = [
@@ -125,7 +135,7 @@ class controlador
     ];
 
     // comprobamos si se ha especificado un orden
-    if(isset($_GET['orden'])){
+    if (isset($_GET['orden'])) {
       $orden = $_GET['orden'];
     }
 
@@ -142,6 +152,15 @@ class controlador
         "tipo" => "success",
         "mensaje" => "El listado se realizó correctamente"
       ];
+
+      // inserto el registro de logs
+      $resultModelo = $this->modelo->insertarlog([
+        "fecha" => date('y-m-d'),
+        'hora' => date('H:i:s'),
+        "operacion" => 'listar entradas',
+        "usuario" => $_SESSION['nick']
+      ]);
+
     else :
       //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
       $this->mensajes[] = [
@@ -185,6 +204,21 @@ class controlador
         $_SESSION['id'] = $parametros['datos']['id'];
         $_SESSION['iniciada'] = true;
         $_SESSION['rol'] = $parametros['datos']['rol'];
+
+        // inserto el registro de logs
+        $resultModelo = $this->modelo->insertarlog([
+          "fecha" => date('y-m-d'),
+          'hora' => date('H:i:s'),
+          "operacion" => 'iniciar sesión',
+          "usuario" => $_SESSION['nick']
+        ]);
+
+        if (!$resultModelo['correcto']) {
+          $this->mensajes[] = [
+            "tipo" => "danger",
+            "mensaje" => "Error al insertar logs"
+          ];
+        }
       } else {
         $this->mensajes[] = [
           "tipo" => "danger",
@@ -196,7 +230,7 @@ class controlador
     $parametros['mensajes'] = $this->mensajes;
 
     if ($resultModelo['correcto']) {
-      $resultModelo['datos']['rol'] == "user" ? $this->listadoUsuario($parametros['datos']['id']) : $this->listadoAdmin();
+      $_SESSION['rol'] == "user" ? $this->listadoUsuario($parametros['datos']['id']) : $this->listadoAdmin();
     } else {
       $this->index();
     }
@@ -297,6 +331,16 @@ class controlador
             "tipo" => "success",
             "mensaje" => "La entrada se registró correctamente!! :)"
           ];
+          // inserto el registro de logs
+          $resultModelo = $this->modelo->insertarlog([
+            "fecha" => date('y-m-d'),
+            'hora' => date('H:i:s'),
+            "operacion" => 'añadir',
+            "usuario" => $_SESSION['nick']
+          ]);
+
+         
+          
         else :
           $this->mensajes[] = [
             "tipo" => "danger",
@@ -363,6 +407,15 @@ class controlador
           "tipo" => "success",
           "mensaje" => "Se eliminó correctamente la entrada"
         ];
+        // inserto el registro de logs
+        $resultModelo = $this->modelo->insertarlog([
+          "fecha" => date('y-m-d'),
+          'hora' => date('H:i:s'),
+          "operacion" => 'eliminar',
+          "usuario" => $_SESSION['nick']
+        ]);
+
+     
       else :
         $this->mensajes[] = [
           "tipo" => "danger",
@@ -498,6 +551,16 @@ class controlador
             "tipo" => "success",
             "mensaje" => "La entrada se ha actualizado correctamente"
           ];
+
+          // inserto el registro de logs
+          $resultModelo = $this->modelo->insertarlog([
+            "fecha" => date('y-m-d'),
+            'hora' => date('H:i:s'),
+            "operacion" => 'actualizar',
+            "usuario" => $_SESSION['nick']
+          ]);
+
+         
         } else {
           $this->mensajes[] = [
             "tipo" => "danger",

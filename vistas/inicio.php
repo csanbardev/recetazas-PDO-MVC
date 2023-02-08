@@ -41,7 +41,7 @@
       ?>
 
     </div>
-
+    <br>
     <?php //Sólo mostramos los enlaces a páginas si existen registros a mostrar
     if ($parametros['paginacion']['totalregistros'] >= 1) :
     ?>
