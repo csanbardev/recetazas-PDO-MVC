@@ -363,12 +363,13 @@ class modelo
     return $return;
   }
 
-  public function insertarlog($datos){
+  public function insertarlog($datos)
+  {
     $return = [
       "corrector" => false,
       "error" => null
     ];
-    try{
+    try {
       $sql = "call insertarLog(:fecha, :hora, :operacion, :usuario)";
       $query = $this->conexion->prepare($sql);
       $query->execute([
@@ -378,14 +379,61 @@ class modelo
         'usuario' => $datos['usuario']
       ]);
 
-      if($query){
+      if ($query) {
         $return['correcto'] = true;
       }
-
-    }catch(PDOException $ex){
+    } catch (PDOException $ex) {
       $return['error'] = $ex->getMessage();
     }
     return $return;
   }
 
+  public function listarLogs()
+  {
+    $return = [
+      "correcto" => false,
+      "datos" => null,
+      "error" => null
+    ];
+
+    try {
+      $sql = "select * from logs";
+      $resultsquery = $this->conexion->query($sql);
+
+      if ($resultsquery) {
+        $return['correcto'] = true;
+        $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+      }
+    } catch (PDOException $ex) {
+      $return['error'] = $ex->getMessage();
+    }
+
+    return $return;
+  }
+
+  public function eliminarLog($id)
+  {
+    $return = [
+      "correcto" => false,
+      "error" => null
+    ];
+
+    try {
+      //Inicializamos la transacción
+      $this->conexion->beginTransaction();
+      //Definimos la instrucción SQL parametrizada 
+      $sql = "DELETE FROM logs WHERE id=:id";
+      $query = $this->conexion->prepare($sql);
+      $query->execute(['id' => $id]);
+      //Supervisamos si la eliminación se realizó correctamente... 
+      if ($query) {
+        $this->conexion->commit();  // commit() confirma los cambios realizados durante la transacción
+        $return["correcto"] = true;
+      } // o no 
+    } catch (PDOException $ex) {
+      $this->conexion->rollback(); // rollback() se revierten los cambios realizados durante la transacción
+      $return["error"] = $ex->getMessage();
+    }
+    return $return;
+  }
 }

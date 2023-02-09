@@ -30,6 +30,9 @@
       if($_SESSION['rol']=='user'){ // el usuario podrá añadir entradas, el admin no
         $html = $html.'<a class="dropdown-item" href="index.php?accion=addEntrada">Añadir</a>';
       }
+      if($_SESSION['rol'] == 'admin'){ // el administrador podrá ver el listado de logs 
+        $html = $html.'<a class="dropdown-item" href="index.php?accion=listarLogs">Ver logs</a>';
+      }
       $html = $html.
       '<a class="dropdown-item" href="index.php?accion=cerrarSesion">Cerrar sesión</a>
     </div>
