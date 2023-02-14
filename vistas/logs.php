@@ -8,7 +8,7 @@
     <?php foreach ($parametros["mensajes"] as $mensaje) : ?>
       <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
     <?php endforeach; ?>
-    <div class="dropdown">
+    <div class="dropdown" <?= count($parametros['datos'])<=0? 'style="display: none"':''?>>
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         Ordenar por fecha
       </button>
@@ -113,9 +113,9 @@
     <?php endif;  //if($totalregistros>=1): 
     ?>
     <br>
-    <a href="index.php?accion=imprimirLogs" class="btn btn-primary">Imprimir en pdf</a>
+    <a <?= count($parametros['datos'])<=0? 'style="display: none"':''?> href="index.php?accion=imprimirLogs" class="btn btn-primary">Imprimir en pdf</a>
   </div>
-
+  <?php require_once 'includes/footer.php' ?>
 </body>
 
 </html>

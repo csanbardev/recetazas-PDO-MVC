@@ -52,6 +52,7 @@
 
 
   
+  <?php require_once 'includes/footer.php' ?>
   <script>
     CKEDITOR.replace('txtdescripcion', {
       height: '500px',

@@ -55,7 +55,7 @@
       <input class="btn btn-primary" type="submit" name="submit">
     </form>
   </div>
-
+  <?php require_once 'includes/footer.php' ?>
   <script>
     CKEDITOR.replace('txtdescripcion', {
       height: '500px',

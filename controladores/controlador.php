@@ -25,7 +25,7 @@ class controlador
 
     // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
     $parametros = [
-      "tituloventana" => "Blog | Últimas entradas",
+      "tituloventana" => "Recetazas | Últimas entradas",
       "datos" => null,
       "mensajes" => [],
       "paginacion" => null
@@ -72,7 +72,7 @@ class controlador
     $orden = "desc"; // por defecto el orden será descendente
     // Almacenamos en el array 'parametros[]'los valores que vamos a mostrar en la vista
     $parametros = [
-      "tituloventana" => "Blog | Usuario",
+      "tituloventana" => "Recetazas | Usuario",
       "datos" => NULL,
       "mensajes" => [],
       "paginacion" => null
@@ -128,7 +128,7 @@ class controlador
     $orden = "desc"; // por defecto, el orden será descendente
 
     $parametros = [
-      "tituloventana" => "Blog | Administrador",
+      "tituloventana" => "Recetazas | Administrador",
       "datos" => null,
       "mensajes" => [],
       "paginacion" => null
@@ -182,7 +182,7 @@ class controlador
   public function iniciarSesion()
   {
     $parametros = [
-      "tituloventana" => "Blog | Inicio",
+      "tituloventana" => "Recetazas | Inicio",
       "datos" => null,
       "mensajes" => []
     ];
@@ -358,7 +358,7 @@ class controlador
 
 
     $parametros = [
-      "tituloventana" => "Blog | Añadir entrada",
+      "tituloventana" => "Recetazas | Añadir",
       "datos" => [
         "txttitulo" => isset($titulo) ? $titulo : "",
         "txtdescripcion" => isset($descripcion) ? $descripcion : "",
@@ -606,7 +606,7 @@ class controlador
     }
 
     $parametros = [
-      "tituloventana" => "Base de Datos con PHP y PDO",
+      "tituloventana" => "Recetazas | Actualizar",
       "datos" => [
         "txttitulo" => $valtitulo,
         "txtdescripcion"  => $valdescripcion,
@@ -700,7 +700,7 @@ class controlador
   public function listarLogs()
   {
     $parametros = [
-      "tituloventana" => "Blog | Registro logs",
+      "tituloventana" => "Recetazas | Logs",
       "datos" => null,
       "mensajes" => [],
       "paginacion" => null
@@ -773,9 +773,10 @@ class controlador
   /**
    * Recupera todos los logs de la base de datos y los imprime en PDF
    */
-  public function imprimirLogs(){
+  public function imprimirLogs()
+  {
     $parametros = [
-      "tituloventana" => "Blog | Registro logs",
+      "tituloventana" => "Recetazas | Logs",
       "datos" => null,
       "mensajes" => []
     ];

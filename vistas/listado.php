@@ -10,7 +10,7 @@
     <?php endforeach; ?>
     <h1>Entradas de <?=$_SESSION['nick']?></h1>  
     <br>
-    <div class="dropdown">
+    <div class="dropdown" <?= count($parametros['datos'])<=0? 'style="display: none"':''?>>
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         Ordenar por fecha
       </button>
@@ -20,6 +20,11 @@
       </div>
     </div>
     <br>  
+    <?php
+       if(count($parametros['datos'])<=0){
+        echo '<h2>No hay entradas para mostrar :C</h2>';
+       } 
+       ?>
     <div class="row">
 
       <?php
@@ -123,6 +128,7 @@
     <?php endif;  //if($totalregistros>=1): 
     ?>
   </div>
+  <?php require_once 'includes/footer.php' ?>
 </body>
 
 </html>

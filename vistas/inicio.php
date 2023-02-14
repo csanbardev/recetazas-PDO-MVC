@@ -11,7 +11,7 @@
       <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
     <?php endforeach; ?>
 
-    <div class="dropdown">
+    <div class="dropdown"<?= count($parametros['datos'])<=0? 'style="display: none"':''?>>
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         Ordenar por fecha
       </button>
@@ -21,6 +21,11 @@
       </div>
     </div>
     <br>
+      <?php
+       if(count($parametros['datos'])<=0){
+        echo '<h2>No hay entradas para mostrar :C</h2>';
+       } 
+       ?>
     <div class="row">
       <?php $formato ?>
       <?php foreach ($parametros["datos"] as $dato) :
@@ -90,8 +95,9 @@
 
     <?php endif;  //if($totalregistros>=1): 
     ?>
-    <a href="index.php?accion=imprimirEntradas" class="btn btn-primary">Imprimir en pdf</a>
+    <a <?= count($parametros['datos'])<=0? 'style="display: none"':''?> href="index.php?accion=imprimirEntradas" class="btn btn-primary">Imprimir en pdf</a>
   </div>
-</body>
 
+  <?php require_once 'includes/footer.php' ?>
+</body>
 </html>
