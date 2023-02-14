@@ -388,7 +388,32 @@ class modelo
     return $return;
   }
 
-  public function listarLogs()
+  public function listarLogsCompleto(){
+    $return = [
+      "correcto" => false,
+      "datos" => null,
+      "error" => null
+    ];
+
+    try {
+      
+
+      $sql = "select * from logs order by fecha";
+      $resultsquery = $this->conexion->query($sql);
+
+      if ($resultsquery) {
+        $return['correcto'] = true;
+        $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+
+      }
+    } catch (PDOException $ex) {
+      $return['error'] = $ex->getMessage();
+    }
+
+    return $return;
+  }
+
+  public function listarLogs($orden)
   {
     $return = [
       "correcto" => false,
@@ -397,12 +422,32 @@ class modelo
     ];
 
     try {
-      $sql = "select * from logs";
+      // establecemos el número de registros por página: por defecto 4
+      $regsxpag = isset($_GET['regsxpag']) ? (int) $_GET['regsxpag'] : 4;
+
+      // establecemos la página que se mostrará. por defecto, la 1
+      $pagina = isset($_GET['pagina']) ? (int) $_GET['pagina'] : 1;
+
+      //Definimos la variable $inicio que indique la posición del registro desde el que se
+      // mostrarán los registros de una página dentro de la paginación.
+      $inicio = ($pagina > 1) ? (($pagina * $regsxpag) - $regsxpag) : 0;
+
+      $sql = "select SQL_CALC_FOUND_ROWS id, operacion, usuario, fecha, hora from logs order by fecha $orden limit $inicio, $regsxpag";
       $resultsquery = $this->conexion->query($sql);
 
       if ($resultsquery) {
         $return['correcto'] = true;
         $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
+        $totalregistros = $this->conexion->query("select found_rows() as total");
+        $totalregistros = $totalregistros->fetch()['total'];
+
+        $numpaginas = ceil($totalregistros / $regsxpag);
+        $return['paginacion'] = [
+          "numpaginas" => $numpaginas,
+          "pagina" => $pagina,
+          "totalregistros" => $totalregistros,
+          "regsxpag" => $regsxpag
+        ];
       }
     } catch (PDOException $ex) {
       $return['error'] = $ex->getMessage();

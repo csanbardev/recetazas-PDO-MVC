@@ -705,12 +705,17 @@ class controlador
       "mensajes" => [],
       "paginacion" => null
     ];
+    $orden = "desc"; // por defecto, el orden será descendente
 
-
-    $resultModelo = $this->modelo->listarLogs();
+    // si se especifica el orden, lo aplicamos aquí
+    if (isset($_GET['orden'])) {
+      $orden = $_GET['orden'];
+    }
+    $resultModelo = $this->modelo->listarLogs($orden);
 
     if ($resultModelo['correcto']) {
       $parametros['datos'] = $resultModelo['datos'];
+      $parametros["paginacion"] = $resultModelo['paginacion'];
       $this->mensajes[] = [
         "tipo" => "success",
         "mensaje" => "El listado se realizó correctamente"
@@ -774,10 +779,10 @@ class controlador
       "datos" => null,
       "mensajes" => []
     ];
-
+    $orden = "desc"; // por defecto, el orden será descendente
 
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
-    $resultModelo = $this->modelo->listarLogs();
+    $resultModelo = $this->modelo->listarLogsCompleto();
     // Si la consulta se realizó correctamente transferimos los datos obtenidos
     // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
     // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos

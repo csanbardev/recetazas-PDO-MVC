@@ -85,7 +85,9 @@
             <li class="page-item"><a class="page-link" href="index.php?pagina=<?php echo $parametros['paginacion']['pagina'] + 1; ?>&regsxpag=<?= $parametros['paginacion']['regsxpag'] ?><?= isset($_GET['orden'])?'&orden='.$_GET['orden']:""?>"> &raquo; </a></li>
           <?php endif; ?>
         </ul>
+        
       </nav>
+
     <?php endif;  //if($totalregistros>=1): 
     ?>
     <a href="index.php?accion=imprimirEntradas" class="btn btn-primary">Imprimir en pdf</a>
