@@ -12,7 +12,9 @@ class modelo
     $this->conectar();
   }
 
-
+  /**
+   * Se conecta a la base de datos
+   */
   public function conectar()
   {
     $resultModelo = ["correcto" => FALSE, "datos" => NULL, "error" => NULL];
@@ -33,6 +35,9 @@ class modelo
     return $resultModelo;
   }
 
+  /**
+   * Lista todas las entradas sin limitaciones de paginación
+   */
   public function listarTodas()
   {
     $return = [
@@ -62,6 +67,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Devuelve una entrada con el id que se le indique
+   */
   public function listarEntrada($id)
   {
     $return = [
@@ -93,6 +101,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Lista todas las entradas en un determinado orden y con opciones de paginación
+   */
   public function listarEntradas($orden)
   {
     $return = [
@@ -141,6 +152,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Elimina la entrada con el id que se le indique
+   */
   public function delentrada($id)
   {
 
@@ -173,6 +187,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Añade una entrada a partir de unos datos
+   */
   public function addentrada($datos)
   {
     $return = [
@@ -210,7 +227,9 @@ class modelo
     return $return;
   }
 
-
+  /**
+   * Actualiza una entrada existente a partir de unos datos
+   */
   public function actentrada($datos)
   {
     $return = [
@@ -255,6 +274,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Lista las entradas de un usuario en un orden concreto y a partir de la id del usuario
+   */
   public function listarEntradasUsuario($id, $orden)
   {
     $return = [
@@ -312,6 +334,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Recupera el usuario que coincida con el nick y la contraseña que se le pase
+   */
   public function obtenerUsuario($nick, $pass)
   {
     $return = [
@@ -339,6 +364,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Devuelve las categorías de la base de datos
+   */
   public function listarCategorias()
   {
     $return = [
@@ -363,6 +391,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Inserta un registro en la tabla de logs llamando al procedimiento
+   */
   public function insertarlog($datos)
   {
     $return = [
@@ -388,7 +419,11 @@ class modelo
     return $return;
   }
 
-  public function listarLogsCompleto(){
+  /**
+   * Devuelve todos los registros de logs sin paginación
+   */
+  public function listarLogsCompleto()
+  {
     $return = [
       "correcto" => false,
       "datos" => null,
@@ -396,7 +431,7 @@ class modelo
     ];
 
     try {
-      
+
 
       $sql = "select * from logs order by fecha";
       $resultsquery = $this->conexion->query($sql);
@@ -404,7 +439,6 @@ class modelo
       if ($resultsquery) {
         $return['correcto'] = true;
         $return['datos'] = $resultsquery->fetchAll(PDO::FETCH_ASSOC);
-
       }
     } catch (PDOException $ex) {
       $return['error'] = $ex->getMessage();
@@ -413,6 +447,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Lista los registros de logs con paginación
+   */
   public function listarLogs($orden)
   {
     $return = [
@@ -456,6 +493,9 @@ class modelo
     return $return;
   }
 
+  /**
+   * Elimina el registro de logs que se le pase por id
+   */
   public function eliminarLog($id)
   {
     $return = [

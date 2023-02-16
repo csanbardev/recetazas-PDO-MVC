@@ -10,7 +10,8 @@
     <?php foreach ($parametros["mensajes"] as $mensaje) : ?>
       <div class="alert alert-<?= $mensaje["tipo"] ?>"><?= $mensaje["mensaje"] ?></div>
     <?php endforeach; ?>
-
+    <h1>Todas las entradas</h1>  
+    <br>
     <div class="dropdown"<?= count($parametros['datos'])<=0? 'style="display: none"':''?>>
       <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
         Ordenar por fecha

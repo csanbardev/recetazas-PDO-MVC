@@ -13,7 +13,7 @@ class controlador
   {
     $this->modelo = new modelo();
     $this->mensajes = [];
-    session_start();
+    session_start(); // prepara la web para aceptar sesiones
   }
 
   /**
@@ -652,9 +652,7 @@ class controlador
     ];
     // Realizamos la consulta y almacenmos los resultados en la variable $resultModelo
     $resultModelo = $this->modelo->listarTodas();
-    // Si la consulta se realizó correctamente transferimos los datos obtenidos
-    // de la consulta del modelo ($resultModelo["datos"]) a nuestro array parámetros
-    // ($parametros["datos"]), que será el que le pasaremos a la vista para visualizarlos
+    
     if ($resultModelo["correcto"]) :
       $parametros["datos"] = $resultModelo["datos"];
       //Definimos el mensaje para el alert de la vista de que todo fue correctamente
@@ -681,14 +679,13 @@ class controlador
 
       $html2pdf->output();
     else :
-      //Definimos el mensaje para el alert de la vista de que se produjeron errores al realizar el listado
+      
       $this->mensajes[] = [
         "tipo" => "danger",
         "mensaje" => "El listado no pudo realizarse correctamente!! :( <br/>({$resultModelo["error"]})"
       ];
     endif;
-    //Asignanis al campo 'mensajes' del array de parámetros el valor del atributo 
-    //'mensaje', que recoge cómo finalizó la operación:
+    
     $parametros["mensajes"] = $this->mensajes;
 
     include_once 'vistas/inicio.php';
@@ -732,6 +729,9 @@ class controlador
     include_once 'vistas/logs.php';
   }
 
+  /**
+   * Elimina un registro de log
+   */
   public function eliminarLog()
   {
     if (isset($_GET['id']) && (is_numeric($_GET['id']))) {
